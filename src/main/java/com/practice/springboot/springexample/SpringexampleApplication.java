@@ -4,7 +4,6 @@ import com.practice.springboot.springexample.bean.MyBean;
 import com.practice.springboot.springexample.bean.MyBeanWithDependency;
 import com.practice.springboot.springexample.bean.MyBeanWithProperties;
 import com.practice.springboot.springexample.component.ComponentDependency;
-import com.practice.springboot.springexample.component.SomeComponentDependency;
 import com.practice.springboot.springexample.entity.User;
 import com.practice.springboot.springexample.pojo.UserPojo;
 import com.practice.springboot.springexample.repository.UserRepository;
@@ -14,10 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 
-import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +24,6 @@ public class SpringexampleApplication implements CommandLineRunner {
 	private final Log LOGGER = LogFactory.getLog(SpringexampleApplication.class);
 
 	private ComponentDependency componentDependency;
-	private SomeComponentDependency someComponentDependency;
 	private MyBean myBean;
 	private MyBeanWithDependency myBeanWithDependency;
 	private MyBeanWithProperties myBeanWithProperties;
@@ -36,18 +31,21 @@ public class SpringexampleApplication implements CommandLineRunner {
 
 	private UserRepository userRepository;
 
-	public SpringexampleApplication(@Qualifier("componentTwoImp") ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependency myBeanWithDependency, MyBeanWithProperties myBeanWithProperties, UserPojo userPojo, UserRepository userRepository, SomeComponentDependency someComponentDependency){
+	public SpringexampleApplication(@Qualifier("componentTwoImp") ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependency myBeanWithDependency, MyBeanWithProperties myBeanWithProperties, UserPojo userPojo, UserRepository userRepository){
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
 		this.myBeanWithDependency = myBeanWithDependency;
 		this.myBeanWithProperties = myBeanWithProperties;
 		this.userPojo = userPojo;
 		this.userRepository = userRepository;
-		this.someComponentDependency = someComponentDependency;
 	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringexampleApplication.class, args);
+	}
+
+	private void getJPQLUser(String email){
+		LOGGER.info(this.userRepository.findByUserEmail(email));
 	}
 
 	private void saveUserInDB(){
@@ -57,12 +55,6 @@ public class SpringexampleApplication implements CommandLineRunner {
 		User user4 = new User("Nicolas4","Nicolas4@mail.com", LocalDate.now());
 		User user5 = new User("Nicolas5","Nicolas4@mail.com", LocalDate.now());
 
-/*		try {
-			this.someComponentDependency.SomeComponent(DataSourceBuilder.create().build());
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-*/
 		List<User> users = Arrays.asList(user1,user2,user3,user4,user5);
 		try {
 			users.stream().forEach(userRepository::save);
@@ -73,7 +65,8 @@ public class SpringexampleApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		saveUserInDB();
+		//saveUserInDB();
+		getJPQLUser("Nicolas3@mail.com");
 	}
 
 	//componentDependency.saludar();

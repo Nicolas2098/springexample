@@ -28,13 +28,4 @@ public class GeneralConfig {
         return new MyBeanWithPropertiesImpl(name,surname);
     }
 
-    /*@Bean
-    public DataSource dataSource(){
-        DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-        dataSourceBuilder.driverClassName("org.postgresql.Driver");
-        dataSourceBuilder.url("jdbc:postgresql://localhost:5432/springexample");
-        dataSourceBuilder.username("postgres");
-        dataSourceBuilder.password("sinPass1");
-        return dataSourceBuilder.build();
-    }*/
 }
