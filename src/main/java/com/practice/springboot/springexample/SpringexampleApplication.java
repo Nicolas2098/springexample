@@ -14,6 +14,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -44,8 +46,9 @@ public class SpringexampleApplication implements CommandLineRunner {
 		SpringApplication.run(SpringexampleApplication.class, args);
 	}
 
-	private void getJPQLUser(String email){
-		LOGGER.info(this.userRepository.findByUserEmail(email));
+	private void getJPQLUser(String email) {
+		LOGGER.info("User for email( " + email + " ): "+ this.userRepository.findByUserEmail(email));
+
 	}
 
 	private void saveUserInDB(){

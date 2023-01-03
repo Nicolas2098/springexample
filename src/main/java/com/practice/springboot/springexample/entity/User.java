@@ -1,6 +1,5 @@
 package com.practice.springboot.springexample.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -10,22 +9,11 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_user", nullable = false, unique = true)
+
     private Long id;
-
-    @Column(length = 50)
     private String name;
-
-    @Column(length = 50)
     private String email;
-
-    @Column(name = "birth_date")
     private LocalDate birthDate;
-
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<Post> posts = new ArrayList<>();
 
     public User() {
@@ -37,6 +25,19 @@ public class User {
         this.birthDate = birthDate;
     }
 
+    public User(Long id, String name, String email, LocalDate birthDate, List<Post> posts) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.birthDate = birthDate;
+        this.posts = posts;
+    }
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_generator")
+    @SequenceGenerator(name = "users_generator", sequenceName = "users_seq", allocationSize = 1)
+    @Column(name = "id_user", nullable = false, unique = true)
     public Long getId() {
         return id;
     }
@@ -45,6 +46,7 @@ public class User {
         this.id = id;
     }
 
+    @Column(length = 50)
     public String getName() {
         return name;
     }
@@ -53,6 +55,7 @@ public class User {
         this.name = name;
     }
 
+    @Column(length = 50)
     public String getEmail() {
         return email;
     }
@@ -60,7 +63,7 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
+    @Column(name = "birth_date")
     public LocalDate getBirthDate() {
         return birthDate;
     }
@@ -69,6 +72,7 @@ public class User {
         this.birthDate = birthDate;
     }
 
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     public List<Post> getPosts() {
         return posts;
     }
